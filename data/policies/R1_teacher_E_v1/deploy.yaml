@@ -1,0 +1,92 @@
+joint_ids_map: [0, 6, 12, 1, 7, 13, 2, 8, 14, 3, 9, 15, 22, 4, 10, 16, 23, 5, 11,
+  17, 24, 18, 25, 19, 26, 20, 27, 21, 28]
+joint_names: [left_hip_pitch_joint, right_hip_pitch_joint, waist_yaw_joint, left_hip_roll_joint,
+  right_hip_roll_joint, waist_roll_joint, left_hip_yaw_joint, right_hip_yaw_joint,
+  waist_pitch_joint, left_knee_joint, right_knee_joint, left_shoulder_pitch_joint,
+  right_shoulder_pitch_joint, left_ankle_pitch_joint, right_ankle_pitch_joint, left_shoulder_roll_joint,
+  right_shoulder_roll_joint, left_ankle_roll_joint, right_ankle_roll_joint, left_shoulder_yaw_joint,
+  right_shoulder_yaw_joint, left_elbow_joint, right_elbow_joint, left_wrist_roll_joint,
+  right_wrist_roll_joint, left_wrist_pitch_joint, right_wrist_pitch_joint, left_wrist_yaw_joint,
+  right_wrist_yaw_joint]
+step_dt: 0.02
+mujoco_xml_path: null
+height_scan_update_s: 0.02
+height_scan_offset: 0.75
+stiffness: [200.0, 150.0, 150.0, 200.0, 20.0, 20.0, 200.0, 150.0, 150.0, 200.0, 20.0,
+  20.0, 200.0, 200.0, 200.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0,
+  40.0, 40.0, 40.0, 40.0, 40.0]
+damping: [5.0, 5.0, 5.0, 5.0, 2.0, 2.0, 5.0, 5.0, 5.0, 5.0, 2.0, 2.0, 5.0, 5.0, 5.0,
+  10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+default_joint_pos: [-0.1, -0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.3, 0.3,
+  0.3, -0.2, -0.2, 0.25, -0.25, 0.0, 0.0, 0.0, 0.0, 0.97, 0.97, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0]
+commands:
+  base_velocity:
+    ranges:
+      lin_vel_x: [-0.6, 1.0]
+      lin_vel_y: [-0.5, 0.5]
+      ang_vel_z: [-1.2, 1.2]
+      heading: [-3.14, 3.14]
+actions:
+  JointPositionAction:
+    clip:
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    - [-20.0, 20.0]
+    joint_names: [left_hip_pitch_joint, left_hip_roll_joint, left_hip_yaw_joint, left_knee_joint,
+      left_ankle_pitch_joint, left_ankle_roll_joint, right_hip_pitch_joint, right_hip_roll_joint,
+      right_hip_yaw_joint, right_knee_joint, right_ankle_pitch_joint, right_ankle_roll_joint,
+      waist_yaw_joint, waist_roll_joint, waist_pitch_joint]
+    scale: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,
+      0.25, 0.25, 0.25]
+    offset: [-0.1, -0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.3, -0.2, -0.2,
+      0.0, 0.0]
+    joint_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17, 18]
+observations:
+  proprio:
+    projected_gravity:
+      params: {}
+      scale: [1.0, 1.0, 1.0]
+      clip: [-100, 100]
+      history_length: 1
+    base_ang_vel:
+      params: {}
+      scale: [0.2, 0.2, 0.2]
+      clip: [-100, 100]
+      history_length: 1
+    velocity_commands:
+      params: {command_name: base_velocity}
+      scale: [1.0, 1.0, 1.0]
+      clip: [-100, 100]
+      history_length: 1
+    joint_pos_rel:
+      params: {}
+      scale: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+      clip: [-100, 100]
+      history_length: 1
+    joint_vel_rel:
+      params: {}
+      scale: [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
+        0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
+        0.05, 0.05, 0.05, 0.05]
+      clip: [-100, 100]
+      history_length: 1
+    last_action:
+      params: {}
+      scale: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0]
+      clip: [-100, 100]
+      history_length: 1

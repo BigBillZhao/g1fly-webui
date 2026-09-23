@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>g1fly — 果蝇脑 × G1 浏览器演示台 (W1)</title>
+<style>
+  [hidden] { display: none !important; }  /* 09-22: #boot/#help 等带 display:flex 的元素会压过 hidden 属性的 UA 样式 ⇒ 浮层永远可见 (BigBill 首开实撞两次) */
+  :root {
+    --bg: #0f1419; --panel: #161c23; --line: #26313c; --fg: #d7e2ec; --dim: #7f95a8;
+    --accent: #ff9f43; --ok: #3ddc84; --bad: #ff5d5d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+    font: 13px/1.5 "SF Mono", ui-monospace, Menlo, Consolas, "Noto Sans CJK SC", sans-serif; }
+  #app { display: grid; grid-template-columns: 330px 1fr; grid-template-rows: 1fr 92px; height: 100%; }
+  .panel { background: var(--panel); border-right: 1px solid var(--line); overflow: auto; }
+  #left { padding: 12px; }
+  #brain-host { width: 100%; height: 230px; background: #12181f; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  #brain-host canvas { display: block; }
+  #brain-info { color: var(--dim); font-size: 11px; margin-top: 5px; min-height: 30px; line-height: 1.35; }
+  #brain-none { margin-top: 8px; }
+  #brain-modules, #brain-dn { border: 1px solid var(--line); border-radius: 4px; background: #12181f; }
+  #right { position: relative; overflow: hidden; }
+  #canvas-host { position: absolute; inset: 0; }
+  canvas { display: block; }
+  /* 09-22 (HiDPI 实撞): 两个 three.js 画布都用 `setSize(w, h, false)` (updateStyle=false) —— three 只写
+     canvas 的 width/height **属性** (= CSS 像素 × devicePixelRatio), 不写 style。没有 CSS 尺寸时, 画布的
+     布局宽度就等于那个属性值 ⇒ dpr=2 的屏 (MBP / 4K 200% 缩放) 上画布是容器的 2 倍大, 溢出被 overflow:hidden
+     裁掉, 人看到的是"左上四分之一", 机器人常常整个在视口外。dpr=1 的屏上凑巧正确, 所以之前没发现
+     (canvas 读回验证读的是整张画布, 永远是对的 —— 又一次 trap #31: DOM 层叠/布局要看真截图)。 */
+  #canvas-host canvas, #brain-host canvas { width: 100%; height: 100%; }
+  h2 { font-size: 12px; margin: 0 0 8px; color: var(--dim); font-weight: 600; letter-spacing: .04em; }
+  .placeholder { border: 1px dashed var(--line); border-radius: 6px; padding: 10px; color: var(--dim); font-size: 12px; }
+  #hud { position: absolute; top: 10px; left: 10px; background: rgba(15,20,25,.82); border: 1px solid var(--line);
+         border-radius: 6px; padding: 8px 10px; font-size: 12px; min-width: 250px; backdrop-filter: blur(3px); }
+  #hud table { border-collapse: collapse; }
+  #hud td { padding: 1px 6px 1px 0; white-space: pre; }
+  #hud td.k { color: var(--dim); }
+  #controls { position: absolute; top: 10px; right: 10px; background: rgba(15,20,25,.82); border: 1px solid var(--line);
+              border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+  select, button { background: #1d252e; color: var(--fg); border: 1px solid var(--line); border-radius: 4px;
+                   padding: 4px 8px; font: inherit; font-size: 12px; cursor: pointer; }
+  button:hover, select:hover { border-color: var(--accent); }
+  label { color: var(--dim); font-size: 11px; display: block; }
+  #depth-pip { position: absolute; right: 10px; bottom: 10px; background: rgba(15,20,25,.86); border: 1px solid var(--line);
+               border-radius: 6px; display: flex; gap: 8px; align-items: flex-end; color: var(--dim); font-size: 11px;
+               text-align: center; padding: 8px; }
+  .pipcell { display: flex; flex-direction: column; gap: 3px; }
+  .pipcell canvas { image-rendering: pixelated; border: 1px solid var(--line); background: #000; }
+  #depth-none { color: var(--dim); max-width: 120px; }
+  #bottom { grid-column: 1 / -1; background: var(--panel); border-top: 1px solid var(--line); padding: 10px 12px;
+            display: flex; gap: 18px; align-items: center; color: var(--dim); font-size: 12px; }
+  #keys b { color: var(--fg); font-weight: 600; }
+  .bad { color: var(--bad); } .ok { color: var(--ok); } .accent { color: var(--accent); }
+  #boot { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column;
+          gap: 10px; background: var(--bg); z-index: 20; color: var(--dim); text-align: center; padding: 20px; }
+  #boot pre { color: var(--bad); font-size: 12px; text-align: left; max-width: 80ch; overflow: auto; }
+  #boot-bar { width: 340px; height: 6px; background: #1d252e; border-radius: 3px; overflow: hidden; }
+  #boot-fill { width: 0%; height: 100%; background: var(--accent); transition: width .15s linear; }
+  #boot-bytes { font-size: 11px; color: var(--dim); }
+  #help { position: absolute; inset: 0; background: rgba(8,11,14,.72); z-index: 30; display: flex;
+          align-items: center; justify-content: center; }
+  #help .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px;
+                max-width: 640px; color: var(--fg); }
+  #help h3 { margin: 0 0 10px; font-size: 14px; color: var(--accent); }
+  #help table { border-collapse: collapse; margin-bottom: 10px; }
+  #help td { padding: 2px 14px 2px 0; font-size: 12px; }
+  #help p { color: var(--dim); font-size: 12px; margin: 6px 0; line-height: 1.6; }
+</style>
+
+<!-- 无构建: importmap 把裸标识符指到 vendor (照抄 zviz/web/selftest.html) -->
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js",
+               "three/addons/": "./vendor/three/jsm/" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <div id="left" class="panel">
+    <h2>果蝇脑 · <span id="brain-title">-</span></h2>
+    <div id="brain-host"></div>
+    <div id="brain-info">把鼠标移到点上看 type / module / 侧 / 符号</div>
+    <div id="brain-none" class="placeholder">本策略无 connectome 模块 (只有 kind=bottleneck 且 core=ei_* 才有脑面板)</div>
+    <h2 id="brain-mod-h" style="margin-top:12px">module 激活 (<span id="brain-nmod">—</span>)</h2>
+    <canvas id="brain-modules" width="280" height="46" style="width:100%;image-rendering:pixelated"></canvas>
+    <h2 style="margin-top:12px">DN 通道 z (<span id="brain-ndn">128</span>)</h2>
+    <canvas id="brain-dn" width="280" height="22" style="width:100%;image-rendering:pixelated"></canvas>
+    <h2 style="margin-top:12px">深度记忆 (学生 512)</h2>
+    <div class="placeholder" id="mem-box">
+      <canvas id="mem-canvas" width="170" height="64" style="width:100%;image-rendering:pixelated"></canvas>
+      <div style="margin-top:4px" id="mem-note">policy_depth 的 GRU 输出, 喂给 actor</div>
+    </div>
+    <h2 style="margin-top:12px">高程扫描 187</h2>
+    <div class="placeholder"><canvas id="scan-canvas" width="170" height="110" style="width:100%;image-rendering:pixelated"></canvas>
+      <div style="margin-top:4px" id="scan-note">17×11 @0.1 m, 挂 torso, yaw 对齐 (近=亮)</div></div>
+  </div>
+
+  <div id="right">
+    <div id="canvas-host"></div>
+    <div id="hud">
+      <table>
+        <tr><td class="k">指令 vx/vy/wz</td><td id="hud-cmd">0.00 / 0.00 / 0.00</td></tr>
+        <tr><td class="k">实际 (体坐标)</td><td id="hud-vel">0.00 / 0.00 / 0.00</td></tr>
+        <tr><td class="k">t / 位移</td><td id="hud-t">0.00 s / 0.00 m</td></tr>
+        <tr><td class="k">ms/步 (物理+策略)</td><td id="hud-ms">-</td></tr>
+        <tr><td class="k">fps (画面)</td><td id="hud-fps">-</td></tr>
+        <tr><td class="k">状态</td><td id="hud-state">加载中</td></tr>
+      </table>
+    </div>
+    <div id="controls">
+      <label>地形 <select id="sel-terrain"></select></label>
+      <label>策略 <select id="sel-policy"></select></label>
+      <button id="btn-reset">重置 (R)</button>
+      <button id="btn-pause">暂停 (P)</button>
+      <button id="btn-cam">相机: 跟随 (C)</button>
+      <button id="btn-help">? 帮助</button>
+    </div>
+    <div id="depth-pip">
+      <div class="pipcell"><canvas id="depth-policy" width="128" height="144"></canvas><span>策略输入 32×36</span></div>
+      <div class="pipcell"><canvas id="depth-raw" width="128" height="72"></canvas><span>原始 64×36 (近=亮)</span></div>
+      <div id="depth-none">教师策略无深度输入</div>
+    </div>
+  </div>
+
+  <div id="bottom">
+    <span id="keys"><b>W/S</b> vx · <b>A/D</b> vy · <b>Q/E</b> wz · <b>空格</b> 停 · <b>R</b> 重置 · <b>P</b> 暂停 · <b>C</b> 相机</span>
+    <span id="foot-info"></span>
+    <span id="foot-err" class="bad"></span>
+  </div>
+</div>
+
+<div id="boot">
+  <div>正在载入 MuJoCo WASM / 机器人 / 地形 / 策略…</div>
+  <div id="boot-bar"><div id="boot-fill"></div></div>
+  <div id="boot-bytes">0 / 0 MB</div>
+  <pre id="boot-err" hidden></pre>
+</div>
+
+<div id="help" hidden>
+  <div class="card">
+    <h3>键盘 / 面板</h3>
+    <table>
+      <tr><td><b>W</b> / <b>S</b></td><td>前后速度 vx ±0.1</td><td><b>R</b></td><td>重置这一集</td></tr>
+      <tr><td><b>A</b> / <b>D</b></td><td>横移速度 vy ±0.1</td><td><b>P</b></td><td>暂停 / 继续</td></tr>
+      <tr><td><b>Q</b> / <b>E</b></td><td>转向 wz ±0.1</td><td><b>C</b></td><td>相机 跟随 / 自由</td></tr>
+      <tr><td><b>空格</b></td><td>指令清零 (站住)</td><td><b>H</b> / <b>?</b></td><td>开关本帮助</td></tr>
+    </table>
+    <p>右上角选地形与策略 (切换要重编译 MJCF, 约 5–15 s)。鼠标: 左键转视角 / 滚轮缩放 / 右键平移。</p>
+    <p>左面板: 瓶颈学生 (connectome) 才有脑点云 —— 点色 = 该神经元的速率 h_v, 青环 = 读出单元 MN;
+       教师/深度学生显示的是高程扫描与深度记忆。把鼠标移到脑点上能看神经元身份。</p>
+    <p>HUD 的 <b>ms/步</b> 是物理+策略的单步耗时 (20 ms 才是实时), <b>fps</b> 是画面帧率。</p>
+    <button id="help-close">知道了 (Esc)</button>
+  </div>
+</div>
+
+<script type="module" src="./js/app/main.mjs"></script>
+</body>
+</html>

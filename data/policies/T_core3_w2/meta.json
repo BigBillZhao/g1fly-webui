@@ -1,0 +1,91 @@
+{
+ "name": "T_core3_w2",
+ "kind": "bottleneck",
+ "run_dir": "/data/scratch/g1fly/runs/g1_bottleneck_distill/2026-09-23_19-09-33_T_core3_w2",
+ "files": {
+  "actor": "policy.onnx"
+ },
+ "io": {
+  "inputs": {
+   "proprio": [
+    1,
+    82
+   ],
+   "depth": [
+    1,
+    1,
+    36,
+    32
+   ],
+   "h_b": [
+    1,
+    1,
+    256
+   ],
+   "h_v": [
+    1,
+    1,
+    9156
+   ]
+  },
+  "outputs": {
+   "actions": [
+    1,
+    15
+   ],
+   "h_b_out": [
+    1,
+    1,
+    256
+   ],
+   "h_v_out": [
+    1,
+    1,
+    9156
+   ],
+   "z": [
+    1,
+    128
+   ]
+  }
+ },
+ "policy_hz": 50,
+ "contract": "contract.json",
+ "obs": {
+  "proprio_dim": 82,
+  "terrain_dim": 187,
+  "action_dim": 15
+ },
+ "built": "2026-09-23T21:16:31",
+ "depth_hz": 25.0,
+ "depth_delay_frames": [
+  1,
+  3
+ ],
+ "brain": {
+  "core": "ei_graph",
+  "core_raw": "ei_graph",
+  "graph_name": "core3_w5",
+  "graph_seed": 0,
+  "readout_port": "MN",
+  "dn_dim": 128,
+  "source": "params/agent.yaml",
+  "has_z": true,
+  "h_v_clip": 1.8555,
+  "h_v_clip_source": "/data/scratch/g1fly/smoke/webui_T_core3_w2_hidden.npz \u7684 p99 (1000 \u6b65\u771f\u95ed\u73af, sim2sim/run.py --record-hidden)",
+  "z_clip": 0.1057,
+  "z_dead": false,
+  "z_clip_source": "/data/scratch/g1fly/smoke/webui_T_core3_w2_hidden.npz \u7684 p99 (1000 \u6b65)",
+  "neurons_file": "brain/core3_w5_neurons.json"
+ },
+ "source": {
+  "eval_json": "/data/scratch/g1fly/runs/_ledger/T_core3_w2/eval.json",
+  "success_rate_mean": 0.8213461935520172
+ },
+ "gz": {
+  "policy.onnx": {
+   "bytes": 345302671,
+   "gz_bytes": 11856389
+  }
+ }
+}

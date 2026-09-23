@@ -1,0 +1,40 @@
+{
+ "name": "R1_teacher_E_v1",
+ "kind": "teacher",
+ "run_dir": "/data/scratch/g1fly/runs/g1_teacher_rough/2026-09-20_22-01-16_R1_teacher_E_v1",
+ "files": {
+  "actor": "policy.onnx"
+ },
+ "io": {
+  "inputs": {
+   "obs": [
+    1,
+    269
+   ]
+  },
+  "outputs": {
+   "actions": [
+    1,
+    15
+   ]
+  }
+ },
+ "policy_hz": 50,
+ "contract": "contract.json",
+ "obs": {
+  "proprio_dim": 82,
+  "terrain_dim": 187,
+  "action_dim": 15
+ },
+ "built": "2026-09-21T15:16:20",
+ "source": {
+  "eval_json": "/data/scratch/g1fly/runs/_ledger/R1_teacher_E_v1/eval.json",
+  "success_rate_mean": 0.8693938255310059
+ },
+ "gz": {
+  "policy.onnx": {
+   "bytes": 1244687,
+   "gz_bytes": null
+  }
+ }
+}

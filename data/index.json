@@ -1,0 +1,410 @@
+{
+ "robot": {
+  "xml": "robot/g1_29dof.xml",
+  "meshdir": "robot/meshes",
+  "meshes": [
+   "head_link.STL",
+   "left_ankle_pitch_link.STL",
+   "left_ankle_roll_link.STL",
+   "left_elbow_link.STL",
+   "left_hip_pitch_link.STL",
+   "left_hip_roll_link.STL",
+   "left_hip_yaw_link.STL",
+   "left_knee_link.STL",
+   "left_rubber_hand.STL",
+   "left_shoulder_pitch_link.STL",
+   "left_shoulder_roll_link.STL",
+   "left_shoulder_yaw_link.STL",
+   "left_wrist_pitch_link.STL",
+   "left_wrist_roll_link.STL",
+   "left_wrist_yaw_link.STL",
+   "logo_link.STL",
+   "pelvis.STL",
+   "pelvis_contour_link.STL",
+   "right_ankle_pitch_link.STL",
+   "right_ankle_roll_link.STL",
+   "right_elbow_link.STL",
+   "right_hip_pitch_link.STL",
+   "right_hip_roll_link.STL",
+   "right_hip_yaw_link.STL",
+   "right_knee_link.STL",
+   "right_rubber_hand.STL",
+   "right_shoulder_pitch_link.STL",
+   "right_shoulder_roll_link.STL",
+   "right_shoulder_yaw_link.STL",
+   "right_wrist_pitch_link.STL",
+   "right_wrist_roll_link.STL",
+   "right_wrist_yaw_link.STL",
+   "torso_link_rev_1_0.STL",
+   "waist_roll_link_rev_1_0.STL",
+   "waist_yaw_link_rev_1_0.STL"
+  ],
+  "mesh_bytes": 19666440,
+  "source": "sim2sim/assets/g1_29dof.xml",
+  "n_actuators": 29,
+  "torque_limit": "urdf (forcerange \u5df2\u5199\u8fdb MJCF)",
+  "mesh_gz_bytes": 8665105
+ },
+ "terrains": [
+  {
+   "id": "flat",
+   "spec": "flat",
+   "name": "flat",
+   "value": 0.0,
+   "repr": "plane",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.0
+   ],
+   "max_stair_level": 0,
+   "bytes": 0,
+   "gz_bytes": 0
+  },
+  {
+   "id": "rough_0.06",
+   "spec": "rough:0.06",
+   "name": "rough",
+   "value": 0.06,
+   "repr": "hfield",
+   "nrow": 61,
+   "ncol": 181,
+   "z_range": [
+    0.0,
+    0.060000000000000005
+   ],
+   "max_stair_level": 0,
+   "bytes": 44164,
+   "gz_bytes": 7782
+  },
+  {
+   "id": "slope_up_10",
+   "spec": "slope_up:10",
+   "name": "slope_up",
+   "value": 10.0,
+   "repr": "boxes",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.7053079228338599
+   ],
+   "max_stair_level": 0,
+   "bytes": 0,
+   "gz_bytes": 0
+  },
+  {
+   "id": "slope_down_10",
+   "spec": "slope_down:10",
+   "name": "slope_down",
+   "value": 10.0,
+   "repr": "boxes",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.7053079228338599
+   ],
+   "max_stair_level": 0,
+   "bytes": 0,
+   "gz_bytes": 0
+  },
+  {
+   "id": "stairs_up_0.10",
+   "spec": "stairs_up:0.10",
+   "name": "stairs_up",
+   "value": 0.1,
+   "repr": "boxes",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.8
+   ],
+   "max_stair_level": 8,
+   "bytes": 0,
+   "gz_bytes": 0
+  },
+  {
+   "id": "stairs_down_0.10",
+   "spec": "stairs_down:0.10",
+   "name": "stairs_down",
+   "value": 0.1,
+   "repr": "boxes",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.8
+   ],
+   "max_stair_level": 8,
+   "bytes": 0,
+   "gz_bytes": 0
+  },
+  {
+   "id": "steps_0.10",
+   "spec": "steps:0.10",
+   "name": "steps",
+   "value": 0.1,
+   "repr": "boxes",
+   "nrow": 241,
+   "ncol": 721,
+   "z_range": [
+    0.0,
+    0.09999999999999998
+   ],
+   "max_stair_level": 0,
+   "bytes": 0,
+   "gz_bytes": 0
+  }
+ ],
+ "policies": [
+  {
+   "name": "R1_teacher_E_v1",
+   "kind": "teacher",
+   "dir": "policies/R1_teacher_E_v1",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_teacher_rough/2026-09-20_22-01-16_R1_teacher_E_v1",
+   "bytes": 1244687,
+   "brain": false,
+   "note": null,
+   "gz_bytes": 1244687
+  },
+  {
+   "name": "R2_student_E_v1",
+   "kind": "student",
+   "dir": "policies/R2_student_E_v1",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_student_distill/2026-09-21_08-17-30_R2_student_E_v1",
+   "bytes": 10649886,
+   "brain": false,
+   "note": null,
+   "gz_bytes": 10649886
+  },
+  {
+   "name": "H_k128_w2",
+   "kind": "bottleneck",
+   "dir": "policies/H_k128_w2",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_bottleneck_distill/2026-09-23_13-36-24_H_k128_w2",
+   "bytes": 8502714,
+   "brain": false,
+   "note": "\u7b2c\u4e8c\u6ce2 GRU \u74f6\u9888\u5bf9\u7167, \u901a\u8def\u6d3b (11.8\u21929.1 m)",
+   "gz_bytes": 8502714
+  },
+  {
+   "name": "T_graph",
+   "kind": "bottleneck",
+   "dir": "policies/T_graph",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_bottleneck_distill/2026-09-21_21-00-44_T_graph",
+   "bytes": 60569506,
+   "brain": true,
+   "note": "\u7b2c\u4e00\u6ce2, \u8111\u901a\u8def\u6b7b (z\u22610)",
+   "gz_bytes": 8423250
+  },
+  {
+   "name": "T_graph_w2",
+   "kind": "bottleneck",
+   "dir": "policies/T_graph_w2",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_bottleneck_distill/2026-09-23_11-45-27_T_graph_w2",
+   "bytes": 60569514,
+   "brain": true,
+   "note": "T1 (3,609) \u00b7 \u7b2c\u4e8c\u6ce2, \u8111\u6d3b",
+   "gz_bytes": 8496840
+  },
+  {
+   "name": "T_core3_w2",
+   "kind": "bottleneck",
+   "dir": "policies/T_core3_w2",
+   "policy_hz": 50,
+   "run_dir": "/data/scratch/g1fly/runs/g1_bottleneck_distill/2026-09-23_19-09-33_T_core3_w2",
+   "bytes": 345302671,
+   "brain": true,
+   "note": "\u5168\u795e\u7ecf\u5143 core3 (9,156) \u00b7 \u7b2c\u4e8c\u6ce2, \u8111\u901a\u8def\u6d3b (\u6df1\u5ea6\u6d88\u878d \u22122.5 m)",
+   "gz_bytes": 11856389
+  }
+ ],
+ "built": "2026-09-23T21:18:12",
+ "versions": {
+  "mujoco_wasm": "3.10.0",
+  "onnxruntime_web": "1.30.0",
+  "three": "r160",
+  "bundle_contract": "webui_bundle_v1"
+ },
+ "gz": {
+  "encoding": "gzip",
+  "suffix": ".gz",
+  "note": "\u65c1\u8f66\u538b\u7f29\u5305 (\u539f\u6587\u4ef6\u4fdd\u7559)\u3002\u524d\u7aef\u5148\u8bd5 <path>.gz + DecompressionStream('gzip'), \u53d6\u4e0d\u5230\u624d\u56de\u843d\u539f\u6587\u4ef6; \u8fdb\u5ea6\u6761\u6309**\u89e3\u538b\u540e**\u5b57\u8282\u7b97\u3002\u4e0d\u5728 files \u91cc\u7684\u6587\u4ef6 = \u538b\u4e0d\u52a8, \u76f4\u63a5\u53d6\u539f\u6587\u4ef6\u3002 [pages] \u8fd9\u4e2a\u90e8\u7f72**\u53ea\u5e26\u65c1\u8f66\u4e0d\u5e26\u539f\u6587\u4ef6** (>= 65536 B \u7684\u90a3\u4e9b), \u6240\u4ee5\u9700\u8981 DecompressionStream\u3002",
+  "files": {
+   "brain/core3_w5_neurons.json": {
+    "bytes": 1682124,
+    "gz_bytes": 213832
+   },
+   "brain/t1_w5_neurons.json": {
+    "bytes": 667286,
+    "gz_bytes": 86573
+   },
+   "policies/T_core3_w2/policy.onnx": {
+    "bytes": 345302671,
+    "gz_bytes": 11856389
+   },
+   "policies/T_graph/policy.onnx": {
+    "bytes": 60569506,
+    "gz_bytes": 8423250
+   },
+   "policies/T_graph_w2/policy.onnx": {
+    "bytes": 60569514,
+    "gz_bytes": 8496840
+   },
+   "robot/meshes/head_link.STL": {
+    "bytes": 932784,
+    "gz_bytes": 423515
+   },
+   "robot/meshes/left_ankle_pitch_link.STL": {
+    "bytes": 71184,
+    "gz_bytes": 28839
+   },
+   "robot/meshes/left_ankle_roll_link.STL": {
+    "bytes": 653384,
+    "gz_bytes": 300771
+   },
+   "robot/meshes/left_elbow_link.STL": {
+    "bytes": 88784,
+    "gz_bytes": 39070
+   },
+   "robot/meshes/left_hip_pitch_link.STL": {
+    "bytes": 181684,
+    "gz_bytes": 77563
+   },
+   "robot/meshes/left_hip_roll_link.STL": {
+    "bytes": 192184,
+    "gz_bytes": 83565
+   },
+   "robot/meshes/left_hip_yaw_link.STL": {
+    "bytes": 296284,
+    "gz_bytes": 131338
+   },
+   "robot/meshes/left_knee_link.STL": {
+    "bytes": 854884,
+    "gz_bytes": 390116
+   },
+   "robot/meshes/left_rubber_hand.STL": {
+    "bytes": 2287484,
+    "gz_bytes": 1074658
+   },
+   "robot/meshes/left_shoulder_pitch_link.STL": {
+    "bytes": 176784,
+    "gz_bytes": 77267
+   },
+   "robot/meshes/left_shoulder_roll_link.STL": {
+    "bytes": 400284,
+    "gz_bytes": 178144
+   },
+   "robot/meshes/left_shoulder_yaw_link.STL": {
+    "bytes": 249184,
+    "gz_bytes": 107836
+   },
+   "robot/meshes/left_wrist_pitch_link.STL": {
+    "bytes": 85984,
+    "gz_bytes": 37989
+   },
+   "robot/meshes/left_wrist_roll_link.STL": {
+    "bytes": 356184,
+    "gz_bytes": 149449
+   },
+   "robot/meshes/left_wrist_yaw_link.STL": {
+    "bytes": 318684,
+    "gz_bytes": 138849
+   },
+   "robot/meshes/logo_link.STL": {
+    "bytes": 243384,
+    "gz_bytes": 103666
+   },
+   "robot/meshes/pelvis.STL": {
+    "bytes": 1060884,
+    "gz_bytes": 435473
+   },
+   "robot/meshes/pelvis_contour_link.STL": {
+    "bytes": 1805184,
+    "gz_bytes": 818485
+   },
+   "robot/meshes/right_ankle_pitch_link.STL": {
+    "bytes": 71184,
+    "gz_bytes": 28825
+   },
+   "robot/meshes/right_ankle_roll_link.STL": {
+    "bytes": 653784,
+    "gz_bytes": 300915
+   },
+   "robot/meshes/right_elbow_link.STL": {
+    "bytes": 88784,
+    "gz_bytes": 39239
+   },
+   "robot/meshes/right_hip_pitch_link.STL": {
+    "bytes": 181284,
+    "gz_bytes": 77418
+   },
+   "robot/meshes/right_hip_roll_link.STL": {
+    "bytes": 192684,
+    "gz_bytes": 83789
+   },
+   "robot/meshes/right_hip_yaw_link.STL": {
+    "bytes": 296284,
+    "gz_bytes": 131026
+   },
+   "robot/meshes/right_knee_link.STL": {
+    "bytes": 852284,
+    "gz_bytes": 388901
+   },
+   "robot/meshes/right_rubber_hand.STL": {
+    "bytes": 2192684,
+    "gz_bytes": 1028463
+   },
+   "robot/meshes/right_shoulder_pitch_link.STL": {
+    "bytes": 176784,
+    "gz_bytes": 77330
+   },
+   "robot/meshes/right_shoulder_roll_link.STL": {
+    "bytes": 401884,
+    "gz_bytes": 179724
+   },
+   "robot/meshes/right_shoulder_yaw_link.STL": {
+    "bytes": 249984,
+    "gz_bytes": 108137
+   },
+   "robot/meshes/right_wrist_pitch_link.STL": {
+    "bytes": 79584,
+    "gz_bytes": 35592
+   },
+   "robot/meshes/right_wrist_roll_link.STL": {
+    "bytes": 356084,
+    "gz_bytes": 150506
+   },
+   "robot/meshes/right_wrist_yaw_link.STL": {
+    "bytes": 341484,
+    "gz_bytes": 147695
+   },
+   "robot/meshes/torso_link_rev_1_0.STL": {
+    "bytes": 2570584,
+    "gz_bytes": 1046676
+   },
+   "robot/meshes/waist_roll_link_rev_1_0.STL": {
+    "bytes": 85884,
+    "gz_bytes": 30891
+   },
+   "robot/meshes/waist_yaw_link_rev_1_0.STL": {
+    "bytes": 619984,
+    "gz_bytes": 213385
+   }
+  },
+  "only": true
+ },
+ "packaged": {
+  "at": "2026-09-23T21:31:02",
+  "by": "webui/tools/package.py --target pages",
+  "note": "GitHub Pages \u9759\u6001\u5feb\u7167; \u53ea\u5e26 R1_teacher_E_v1, R2_student_E_v1, H_k128_w2, T_graph, T_graph_w2, T_core3_w2 (\u6f14\u793a\u7528\u968f\u673a\u6743\u91cd\u6a21\u578b\u3001data/checks/\u3001serve.py/tools \u90fd\u4e0d\u8fdb\u5305)"
+ }
+}
